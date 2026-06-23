@@ -1,0 +1,35 @@
+# Nuxt
+.nuxt
+.output
+.data
+.cache
+dist
+
+# Node
+node_modules
+*.log
+.npm
+.pnpm-store
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+.vercel
+.netlify
+.cloudflare

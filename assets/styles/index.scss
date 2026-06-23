@@ -1,0 +1,272 @@
+// =============================================================
+//  Global Stylesheet — Neo-Classical Abyss
+//  顺序很关键：reset → tokens → root vars → base → 工具
+// =============================================================
+
+@use "./tokens" as *;
+
+// ---------- CSS Variables · 全局主题根 ----------
+:root {
+  --color-museum-white: #{$color-museum-white};
+  --color-frost-white: #{$color-frost-white};
+  --color-ice-mist: #{$color-ice-mist};
+  --color-cold-stone: #{$color-cold-stone};
+  --color-graphite: #{$color-graphite};
+  --color-pale-blue: #{$color-pale-blue};
+  --color-cold-blue: #{$color-cold-blue};
+  --color-depth-blue: #{$color-depth-blue};
+  --color-deep-sea: #{$color-deep-sea};
+  // Color · Void
+  --color-void: #{$color-void};
+  --color-abyss: #{$color-abyss};
+  --color-depth: #{$color-depth};
+
+  // Color · Frost
+  --color-frost: #{$color-frost};
+  --color-ice: #{$color-ice};
+  --color-glacier: #{$color-glacier};
+  --color-steel-blue: #{$color-steel-blue};
+
+  // Color · Marble
+  --color-marble: #{$color-marble};
+  --color-stone: #{$color-stone};
+
+  // Color · Signal
+  --color-signal: #{$color-signal};
+  --color-cyan-dim: #{$color-cyan-dim};
+
+  // Lines
+  --line-soft: #{$line-soft};
+  --line-mid: #{$line-mid};
+  --line-strong: #{$line-strong};
+  --line-on-light: rgba(38, 48, 56, 0.18);
+  --line-on-light-mid: rgba(38, 48, 56, 0.32);
+  --line-on-dark: rgba(230, 238, 242, 0.16);
+  --line-on-dark-mid: rgba(230, 238, 242, 0.32);
+  --line-current-soft: var(--line-on-light);
+  --line-current-mid: var(--line-on-light-mid);
+  --line-current-strong: rgba(38, 48, 56, 0.48);
+
+  // Panels
+  --panel-bg: #{$panel-bg};
+  --panel-bg-deep: #{$panel-bg-deep};
+  --panel-border: #{$panel-border};
+  --panel-light: rgba(243, 246, 247, 0.52);
+  --panel-dark: rgba(2, 4, 10, 0.46);
+  --panel-current: var(--panel-light);
+
+  // Typography
+  --font-display: #{$font-display};
+  --font-serif: #{$font-serif};
+  --font-sans: #{$font-sans};
+  --font-mono: #{$font-mono};
+
+  // Easing
+  --ease-fluid: #{$ease-fluid};
+  --ease-empire: #{$ease-empire};
+  --ease-abyss: #{$ease-abyss};
+
+  // ---------- 滚动 / 状态变量 (由 JS / TresJS 持续更新) ----------
+  --depth-progress: 0; // 0 = 海面, 1 = 深渊
+  --fog-opacity: 0; // 越深雾越浓
+  --particle-opacity: 0; // 浮游生物出现度
+  --ocean-opacity: 0; // 深海背景层透明度
+  --scroll-y: 0; // 滚动 Y 像素
+  --viewport-h: 100dvh;
+  --mouse-x: 0; // 鼠标归一化 -1~1
+  --mouse-y: 0;
+  --surface-progress: 0;
+  --abyss-bg: var(--color-museum-white);
+  --abyss-fg: #18252c;
+  --abyss-fg-muted: rgba(24, 37, 44, 0.66);
+  --abyss-fg-subtle: rgba(24, 37, 44, 0.46);
+  --accent-current: #2e6d83;
+
+  color-scheme: light;
+}
+
+// ---------- Base ----------
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  background: var(--abyss-bg);
+  color: var(--abyss-fg);
+  font-family: $font-sans;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: auto; // Lenis 全权接管
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--abyss-bg);
+  font-feature-settings: "ss01", "ss02", "cv11";
+  letter-spacing: 0.01em;
+  overflow-x: hidden;
+  position: relative;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent-current) 28%, transparent);
+  color: var(--abyss-fg);
+}
+
+// 滚动条 - 深海色
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-current-mid);
+  border-radius: 999px;
+  transition: background 0.6s $ease-fluid;
+  &:hover {
+    background: var(--line-current-strong);
+  }
+}
+
+// ---------- Typography defaults ----------
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-display;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin: 0;
+  color: var(--abyss-fg);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition:
+    color 0.5s $ease-fluid,
+    opacity 0.5s $ease-fluid;
+}
+
+// ---------- Utility · Display 字体 ----------
+.font-display {
+  font-family: $font-display;
+}
+.font-sans {
+  font-family: $font-sans;
+}
+.font-serif {
+  font-family: $font-serif;
+}
+.font-mono {
+  font-family: $font-mono;
+}
+
+// ---------- Utility · Eyebrow (深海章节铭牌) ----------
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: $font-mono;
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--abyss-fg-muted);
+
+  &::before {
+    content: "";
+    width: 24px;
+    height: 1px;
+    background: var(--abyss-fg-muted);
+    opacity: 0.5;
+  }
+}
+
+// ---------- Utility · Hairline divider ----------
+.hairline {
+  position: relative;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--line-current-mid) 18%,
+    var(--line-current-mid) 82%,
+    transparent 100%
+  );
+}
+
+// ---------- Utility · 镀光文字 (signal text) ----------
+.text-signal {
+  background: linear-gradient(180deg, var(--abyss-fg) 0%, var(--accent-current) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+// ---------- Lenis 必备 (无障碍 + 性能) ----------
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+// ---------- 滚动锁定 (ACT 01 / 转场期间) ----------
+html.abyss-scroll-locked,
+html.abyss-scroll-locked body {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+// ---------- 深海薄膜噪点 (固定层 · 永不滚动) ----------
+.abyss-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.045;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.93 0 0 0 0 0.95 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+// ---------- Reduced motion 全局降级 ----------
+@include reduced-motion {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
