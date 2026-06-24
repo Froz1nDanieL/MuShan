@@ -251,10 +251,30 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  const root = rootRef.value;
+
+  // Hide first, before GSAP restores any captured inline styles. Vue removes
+  // the node in the same update, but this ordering also prevents a paint when
+  // the leave transition and ScrollTrigger cleanup land on adjacent frames.
+  if (root) {
+    root.style.visibility = "hidden";
+    root.style.opacity = "0";
+  }
+
   entranceTimeline?.kill();
   entranceTimeline = null;
   animationContext?.revert();
   animationContext = null;
+
+  // Context reversion restores pre-animation opacity. Keep the already-exited
+  // iceberg hidden during the final DOM removal to prevent an ACT 04 flash.
+  if (root) {
+    gsap.set(root, {
+      opacity: 0,
+      visibility: "hidden",
+      transform: "none",
+    });
+  }
 });
 </script>
 

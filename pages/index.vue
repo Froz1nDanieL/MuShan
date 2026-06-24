@@ -2,9 +2,7 @@
   <div class="abyss-stage">
     <!-- 1) TresJS · 全局深海场景 (固定) -->
     <ClientOnly>
-      <AbyssScene
-        v-if="stage === 'sculpture' || stage === 'revealing-tip'"
-      />
+      <AbyssScene v-if="stage === 'sculpture' || stage === 'revealing-tip'" />
     </ClientOnly>
 
     <!-- 2) 全局 HUD (深度 / 坐标 / Act 标号) -->
@@ -12,16 +10,22 @@
 
     <!-- 3) ACT 01 雕塑入口 -->
     <Transition name="fade">
-      <ActSculpture v-if="stage === 'sculpture'" />
+      <XRayImageSection
+        v-if="stage === 'sculpture'"
+        class="home-xray"
+        image-src="/images/xray-img1.JPG"
+        :radius="190"
+        :glow="true"
+      >
+        <ActSculpture />
+      </XRayImageSection>
     </Transition>
 
     <!-- 4) ACT 02 冰山一角 -->
     <Transition name="surface-fade">
       <ActTip
         v-if="
-          stage === 'revealing-tip' ||
-          stage === 'tip' ||
-          stage === 'descending'
+          stage === 'revealing-tip' || stage === 'tip' || stage === 'descending'
         "
       />
     </Transition>
@@ -39,23 +43,24 @@
 </template>
 
 <script setup lang="ts">
-import { useSceneStage } from '~/composables/useSceneStage'
-import { useScrollLock } from '~/composables/useScrollLock'
-import { useScrollDirector } from '~/composables/useScrollDirector'
+import { useSceneStage } from "~/composables/useSceneStage";
+import { useScrollLock } from "~/composables/useScrollLock";
+import { useScrollDirector } from "~/composables/useScrollDirector";
 
-const { stage, canScroll } = useSceneStage()
-useScrollLock()
-useScrollDirector()
+const { stage, canScroll } = useSceneStage();
+useScrollLock();
+useScrollDirector();
 
 useHead({
-  title: 'Mu Shan: Neo-Classical Abyss',
+  title: "Mu Shan: Neo-Classical Abyss",
   meta: [
     {
-      name: 'description',
-      content: 'A neo-classical deep-sea exhibition hall. A personal portfolio rendered as the descent into an abyss.',
+      name: "description",
+      content:
+        "A neo-classical deep-sea exhibition hall. A personal portfolio rendered as the descent into an abyss.",
     },
   ],
-})
+});
 </script>
 
 <style lang="scss" scoped>
@@ -72,10 +77,25 @@ useHead({
   pointer-events: auto;
 }
 
+.home-xray {
+  min-height: 100dvh;
+
+  // The source image has a light preview grid. This cold monochrome treatment
+  // pushes it into the gallery surface and leaves only the sculptural relief.
+  :deep(.xray-image-section__image) {
+    object-position: center 42%;
+    filter: grayscale(1) contrast(1.55) brightness(1.1);
+    mix-blend-mode: multiply;
+    opacity: 0.82;
+  }
+}
+
 // ---------- Vue Transition ----------
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.9s $ease-fluid, transform 0.9s $ease-fluid;
+  transition:
+    opacity 0.9s $ease-fluid,
+    transform 0.9s $ease-fluid;
 }
 .fade-enter-from,
 .fade-leave-to {

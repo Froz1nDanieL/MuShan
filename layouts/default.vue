@@ -145,10 +145,6 @@ onBeforeUnmount(() => {
   // 背景与文字前景由 useAbyssGradient 注入的 CSS 变量驱动
   background: var(--abyss-bg, var(--color-void));
   color: var(--abyss-fg, var(--color-frost));
-  // 平滑过渡：保证色阶切换不抖
-  transition:
-    background-color 180ms $ease-abyss,
-    color 180ms $ease-abyss;
 }
 
 .abyss-smooth {
