@@ -13,13 +13,34 @@
       <span>THE FACE</span>
     </header>
 
+    <h1
+      id="face-title"
+      class="act-sculpture__identity"
+      aria-label="Daniel Chan"
+    >
+      <span
+        class="act-sculpture__name-rail act-sculpture__name-rail--left"
+        aria-hidden="true"
+      >
+        <span>D</span>
+        <span>A</span>
+        <span>N</span>
+        <span>I</span>
+        <span>E</span>
+        <span>L</span>
+      </span>
+      <span
+        class="act-sculpture__name-rail act-sculpture__name-rail--right"
+        aria-hidden="true"
+      >
+        <span>C</span>
+        <span>H</span>
+        <span>A</span>
+        <span>N</span>
+      </span>
+    </h1>
+
     <div class="act-sculpture__content">
-      <p class="act-sculpture__kicker">A study in first impressions</p>
-      <h1 id="face-title" class="act-sculpture__title">The visible self.</h1>
-      <p class="act-sculpture__lede">
-        What appears first is only an outline. The deeper self waits beneath the
-        surface.
-      </p>
       <button class="act-sculpture__cta" type="button" @click="reveal">
         <span class="act-sculpture__cta-label">What lies beneath</span>
         <span class="act-sculpture__cta-arrow" aria-hidden="true">
@@ -117,48 +138,79 @@ function reveal() {
     background: var(--line-current-mid);
   }
 
+  &__identity {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    margin: 0;
+    pointer-events: none;
+  }
+
+  &__name-rail {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    justify-content: space-between;
+    width: clamp(19rem, 27vw, 38rem);
+    font-family:
+      "Bodoni 72",
+      "Bodoni MT",
+      "Cormorant Garamond",
+      "Noto Serif SC",
+      "Songti SC",
+      serif;
+    font-size: clamp(3.55rem, 6.9vw, 8.15rem);
+    font-weight: 500;
+    line-height: 0.82;
+    letter-spacing: 0;
+    color: color-mix(in srgb, var(--abyss-fg) 94%, var(--color-cold-stone) 6%);
+    white-space: nowrap;
+    text-rendering: geometricPrecision;
+    font-kerning: normal;
+    font-variant-caps: normal;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1,
+      "calt" 0;
+    -webkit-font-smoothing: antialiased;
+    opacity: 0;
+    text-shadow:
+      0 0.014em 0 rgba(255, 255, 255, 0.38),
+      0 -0.01em 0 rgba(2, 4, 10, 0.1);
+    animation: name-reveal 1.15s $ease-abyss 180ms forwards;
+
+    &--left {
+      right: calc(50% + clamp(12.65rem, 18vw, 20.5rem));
+      transform: translateY(-50%);
+    }
+
+    &--right {
+      left: calc(50% + clamp(12.65rem, 18vw, 20.5rem));
+      transform: translateY(-50%);
+    }
+
+    span {
+      display: block;
+      transform: scaleX(1.08);
+      transform-origin: center;
+    }
+  }
+
   &__content {
     position: absolute;
-    left: clamp(2rem, 8vw, 8rem);
-    top: 50%;
-    transform: translateY(-50%);
-    width: min(48rem, calc(100vw - 2.5rem));
+    top: calc(50% + clamp(11.5rem, 25vh, 16rem));
+    left: 50%;
+    z-index: 3;
+    transform: translateX(-50%);
+    width: max-content;
     pointer-events: auto;
-  }
-
-  &__kicker {
-    margin-bottom: 1rem;
-    font-family: $font-sans;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--abyss-fg-muted);
-  }
-
-  &__title {
-    max-width: 8ch;
-    font-size: clamp(3.4rem, 7.3vw, 7.8rem);
-    line-height: 0.88;
-    letter-spacing: -0.045em;
-    color: inherit;
-    text-wrap: balance;
-  }
-
-  &__lede {
-    margin-top: 1.4rem;
-    max-width: 28ch;
-    font-family: $font-sans;
-    font-size: clamp(0.95rem, 1.2vw, 1.08rem);
-    line-height: 1.6;
-    color: var(--abyss-fg-muted);
   }
 
   &__cta {
     display: inline-flex;
     align-items: center;
     gap: 0.85rem;
-    margin-top: 2.25rem;
+    margin-top: 1.5rem;
     padding: 0.5rem 0;
     border: 0;
     background: transparent;
@@ -226,23 +278,49 @@ function reveal() {
   @media (max-width: 767px) {
     padding: 1.25rem;
 
+    &__name-rail {
+      top: 47%;
+      width: min(35vw, 7.5rem);
+      font-size: clamp(1.16rem, 6.2vw, 1.92rem);
+      text-shadow:
+        0 0.014em 0 rgba(255, 255, 255, 0.36),
+        0 -0.01em 0 rgba(2, 4, 10, 0.06);
+
+      &--left {
+        left: 1.2rem;
+        right: auto;
+        transform: translateY(-50%);
+      }
+
+      &--right {
+        left: auto;
+        right: 1.2rem;
+        transform: translateY(-50%);
+      }
+    }
+
     &__content {
-      left: 1.25rem;
-      right: 1.25rem;
-      top: 50%;
-      bottom: auto;
-      transform: translateY(-50%);
-      width: auto;
+      top: auto;
+      bottom: clamp(2.4rem, 9vh, 4rem);
+      left: 50%;
+      width: max-content;
     }
+  }
+}
 
-    &__title {
-      max-width: 10ch;
-      font-size: clamp(3.25rem, 16vw, 5.25rem);
-    }
+@keyframes name-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
-    &__lede {
-      max-width: 32ch;
-    }
+@media (prefers-reduced-motion: reduce) {
+  .act-sculpture__name-rail {
+    opacity: 1;
+    animation: none;
   }
 }
 </style>

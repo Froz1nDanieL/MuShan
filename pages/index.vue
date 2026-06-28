@@ -73,7 +73,7 @@ useHead({
 .abyss-track {
   position: relative;
   z-index: 2;
-  padding-top: 100dvh;
+  padding-top: 255dvh;
   pointer-events: auto;
 }
 
@@ -112,5 +112,11 @@ useHead({
 .surface-fade-enter-from,
 .surface-fade-leave-to {
   opacity: 0;
+}
+
+@media (max-width: 767px) {
+  .abyss-track {
+    padding-top: 270dvh;
+  }
 }
 </style>

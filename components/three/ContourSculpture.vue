@@ -78,20 +78,9 @@ const { width: viewportWidth, height: viewportHeight } = useWindowSize({
 const { pixelRatio } = useDevicePixelRatio();
 const { textOnLight } = useAbyssGradient();
 
-const desktopGroupX = computed(() => {
-  const aspect =
-    Number.isFinite(viewportWidth.value) &&
-    Number.isFinite(viewportHeight.value) &&
-    viewportWidth.value > 0 &&
-    viewportHeight.value > 0
-      ? viewportWidth.value / viewportHeight.value
-      : 16 / 9;
-  return THREE.MathUtils.clamp(5.596 * aspect * 0.23, 1.65, 2.4);
-});
-
 const groupPosition = computed<[number, number, number]>(() => [
-  isMobile.value ? 0.38 : desktopGroupX.value,
-  props.positionY + (isMobile.value ? 0.47 : 0),
+  0,
+  props.positionY,
   0,
 ]);
 
