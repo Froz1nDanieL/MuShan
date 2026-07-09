@@ -1,5 +1,5 @@
 <template>
-  <div class="abyss-scene" aria-hidden="true">
+  <div class="abyss-scene" :data-stage="stage" aria-hidden="true">
     <TresCanvas v-bind="canvasConfig" window-size>
       <TresPerspectiveCamera
         :position="cameraPosition"
@@ -79,13 +79,13 @@ watch(
         defaults: { ease: "power2.inOut" },
         onComplete: finishReveal,
       })
-      .to(sculptureScale, { value: 0.58, duration: 1.35 }, 0)
-      .to(sculptureY, { value: 1.45, duration: 1.35 }, 0)
-      .to(sculptureOpacity, { value: 0, duration: 1.05 }, 0.12)
-      .to(sculptureWireOpacity, { value: 0, duration: 0.9 }, 0.16)
-      .to(sculptureRim, { value: 0, duration: 1 }, 0.14)
-      .to(clearColor, { value: "#E9F0F2", duration: 0.9 }, 0.35)
-      .to(fogColor, { value: "#E9F0F2", duration: 0.9 }, 0.35);
+      .set(sculptureScale, { value: 1 }, 0)
+      .set(sculptureY, { value: 0 }, 0)
+      .to(sculptureOpacity, { value: 0, duration: 0.48 }, 0)
+      .to(sculptureWireOpacity, { value: 0, duration: 0.48 }, 0)
+      .to(sculptureRim, { value: 0, duration: 0.48 }, 0)
+      .to(clearColor, { value: "#E9F0F2", duration: 0.52 }, 0)
+      .to(fogColor, { value: "#E9F0F2", duration: 0.52 }, 0);
   },
   { immediate: true },
 );
@@ -103,5 +103,19 @@ onBeforeUnmount(() => {
   z-index: 0;
   pointer-events: none;
   background: var(--abyss-bg, var(--color-museum-white));
+  opacity: 1;
+  transition: opacity 520ms $ease-fluid;
+  will-change: opacity;
+}
+
+.abyss-scene[data-stage="revealing-tip"] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .abyss-scene {
+    transition: none;
+    will-change: auto;
+  }
 }
 </style>

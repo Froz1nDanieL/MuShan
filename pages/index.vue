@@ -18,7 +18,7 @@
       :phase="currentPhase"
     />
 
-    <Transition name="slide-fade" mode="out-in">
+    <Transition name="act-one-fade">
       <XRayImageSection
         v-if="stage === 'sculpture'"
         key="act-01"
@@ -29,9 +29,11 @@
       >
         <ActSculpture />
       </XRayImageSection>
+    </Transition>
 
+    <Transition name="slide-fade" mode="out-in">
       <section
-        v-else-if="showActTitle"
+        v-if="stage !== 'sculpture' && showActTitle"
         :key="`act-${frameAct}-title`"
         class="abyss-stage__slide abyss-stage__title-card"
         :aria-labelledby="`act-${frameAct}-title`"
@@ -330,7 +332,7 @@ function goNext() {
   if (stage.value === "sculpture") {
     act2Phase.value = "title";
     enterReveal();
-    lockTransition(1900);
+    lockTransition(950);
     return;
   }
 
@@ -753,16 +755,6 @@ useHead({
   }
 }
 
-.home-xray.slide-fade-leave-active {
-  transition: opacity 720ms $ease-fluid;
-}
-
-.home-xray.slide-fade-leave-to {
-  opacity: 0;
-  filter: none;
-  transform: none;
-}
-
 .abyss-stage__nav {
   position: fixed;
   right: clamp(1.65rem, 2.75vw, 3rem);
@@ -922,6 +914,21 @@ useHead({
   outline-offset: 0.35rem;
 }
 
+.act-one-fade-enter-active,
+.act-one-fade-leave-active {
+  transition: opacity 620ms $ease-fluid;
+}
+
+.act-one-fade-enter-from,
+.act-one-fade-leave-to {
+  opacity: 0;
+}
+
+.act-one-fade-enter-to,
+.act-one-fade-leave-from {
+  opacity: 1;
+}
+
 .slide-fade-enter-active,
 .slide-fade-leave-active {
   transition:
@@ -938,6 +945,8 @@ useHead({
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .act-one-fade-enter-active,
+  .act-one-fade-leave-active,
   .slide-fade-enter-active,
   .slide-fade-leave-active,
   .abyss-stage,
