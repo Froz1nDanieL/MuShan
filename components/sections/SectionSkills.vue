@@ -1,140 +1,556 @@
 <template>
-  <DepthSection
+  <section
     id="skills"
-    depth="360M"
-    title="The mass"
-    stage="04"
+    class="project-study"
+    :data-project="activeProject.id"
     data-depth-section
+    aria-label="Project study"
   >
-    <p class="skills__lede">
-      Four disciplines trained together, because the work gets stronger when the
-      seams disappear.
-    </p>
+    <span class="project-study__ghost-index" aria-hidden="true">
+      {{ activeProject.index }}
+    </span>
 
-    <ul class="skills__grid">
-      <li
-        v-for="(group, i) in groups"
-        :key="group.title"
-        class="skills__group"
-        :data-size="group.size"
+    <svg
+      class="project-study__field-lines"
+      viewBox="0 0 1200 560"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path d="M92 330 C 280 228, 420 392, 594 286 S 884 184, 1110 304" />
+      <path d="M152 456 H1048" />
+    </svg>
+
+    <Transition name="project-study-fade" mode="out-in">
+      <article :key="activeProject.id" class="project-study__article">
+        <div class="project-study__copy">
+          <p class="project-study__eyebrow">
+            <span>PROJECT {{ activeProject.index }}</span>
+            <span>{{ activeProject.depth }}</span>
+          </p>
+
+          <h2 class="project-study__name">{{ activeProject.name }}</h2>
+          <p class="project-study__subtitle">{{ activeProject.subtitle }}</p>
+          <p class="project-study__summary">{{ activeProject.summary }}</p>
+
+          <div class="project-study__intent">
+            <span>Study</span>
+            <p>{{ activeProject.intent }}</p>
+          </div>
+
+          <dl class="project-study__facts">
+            <div>
+              <dt>Interface</dt>
+              <dd>{{ activeProject.interface }}</dd>
+            </div>
+            <div>
+              <dt>System</dt>
+              <dd>{{ activeProject.system }}</dd>
+            </div>
+            <div>
+              <dt>Focus</dt>
+              <dd>{{ activeProject.focus }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="project-study__visual" aria-hidden="true">
+          <svg viewBox="0 0 520 520" preserveAspectRatio="xMidYMid meet">
+            <g v-if="activeProject.visual === 'form'" class="project-study__diagram">
+                <path d="M256 72 C 304 92, 331 145, 322 202 C 313 258, 278 312, 256 378" />
+                <path d="M256 72 C 207 92, 181 145, 190 202 C 199 258, 234 312, 256 378" />
+                <path d="M210 128 C 232 114, 280 114, 302 128" />
+                <path d="M194 186 C 232 166, 282 166, 320 186" />
+                <path d="M196 248 C 232 270, 282 270, 318 248" />
+                <path d="M214 324 C 238 338, 274 338, 298 324" />
+                <path d="M168 392 C 208 366, 304 366, 344 392" />
+                <path d="M126 420 C 180 388, 332 388, 394 420" />
+                <circle cx="256" cy="228" r="10" />
+                <path d="M256 228 V384" />
+            </g>
+
+            <g v-else-if="activeProject.visual === 'language'" class="project-study__diagram">
+                <path d="M154 92 H318 L370 144 V418 H154 Z" />
+                <path d="M318 92 V146 H370" />
+                <path d="M190 174 H320" />
+                <path d="M190 206 H300" />
+                <path d="M190 238 H334" />
+                <path d="M190 270 H286" />
+                <path d="M190 332 C 230 304, 272 362, 310 330 S 372 300, 398 340" />
+                <path d="M114 178 C 84 206, 84 278, 114 306" />
+                <path d="M406 178 C 438 208, 438 278, 406 306" />
+                <circle cx="232" cy="130" r="8" />
+                <circle cx="264" cy="130" r="8" />
+            </g>
+
+            <g v-else class="project-study__diagram">
+                <rect x="118" y="118" width="284" height="232" rx="6" />
+                <path d="M150 154 H236" />
+                <path d="M280 154 H368" />
+                <rect x="150" y="190" width="74" height="60" rx="4" />
+                <rect x="246" y="190" width="74" height="60" rx="4" />
+                <rect x="150" y="272" width="74" height="44" rx="4" />
+                <rect x="246" y="272" width="122" height="44" rx="4" />
+                <path d="M120 384 C 176 346, 246 422, 306 372 S 386 346, 432 394" />
+                <circle cx="382" cy="106" r="24" />
+                <path d="M400 124 L438 162" />
+            </g>
+          </svg>
+
+          <p>{{ activeProject.diagramNote }}</p>
+        </div>
+      </article>
+    </Transition>
+
+    <nav class="project-study__nav" aria-label="Project sequence">
+      <button
+        v-for="project in projects"
+        :key="project.id"
+        class="project-study__nav-item"
+        :class="{ 'is-active': project.id === activeProject.id }"
+        type="button"
+        :aria-label="`Show ${project.name}`"
+        :aria-current="project.id === activeProject.id ? 'step' : undefined"
+        @click="emit('selectProject', project.id)"
       >
-        <span class="skills__group-index">{{ String(i + 1).padStart(2, "0") }}</span>
-        <h3 class="skills__group-title">{{ group.title }}</h3>
-        <ul class="skills__group-items">
-          <li v-for="item in group.items" :key="item" class="skills__item">
-            {{ item }}
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </DepthSection>
+        <span>{{ project.index }}</span>
+        <strong>{{ project.name }}</strong>
+      </button>
+    </nav>
+  </section>
 </template>
 
 <script setup lang="ts">
-const groups = [
+import { computed } from "vue";
+
+type ProjectId = "formcarv" | "msen" | "tucang";
+
+type ProjectStudy = {
+  id: ProjectId;
+  index: string;
+  name: string;
+  depth: string;
+  subtitle: string;
+  summary: string;
+  intent: string;
+  interface: string;
+  system: string;
+  focus: string;
+  diagramNote: string;
+  visual: "form" | "language" | "archive";
+};
+
+const props = withDefaults(
+  defineProps<{
+    projectId?: ProjectId;
+  }>(),
   {
-    title: "Frontend engineering",
-    size: "wide",
-    items: ["Vue 3 and Nuxt 3", "TypeScript", "SCSS and CSS variables", "GSAP and Lenis", "TresJS and WebGL"],
+    projectId: "formcarv",
+  },
+);
+
+const emit = defineEmits<{
+  selectProject: [id: ProjectId];
+}>();
+
+const projects: ProjectStudy[] = [
+  {
+    id: "formcarv",
+    index: "01",
+    name: "Form-Carv",
+    depth: "360M",
+    subtitle: "Form through repetition",
+    summary:
+      "A mobile training record for exercises, sets, history and body metrics. It treats fitness less like noise and more like a precise record of change.",
+    intent:
+      "Turn repeated physical work into a calm interface where progress can be reviewed without performance theatre.",
+    interface: "Flutter mobile app",
+    system: "Spring Boot, PostgreSQL, MyBatis-Plus, Sa-Token",
+    focus: "exercise library, workout history, body metrics",
+    diagramNote: "body ledger, reduced to line and measure",
+    visual: "form",
   },
   {
-    title: "Interface design",
-    size: "narrow",
-    items: ["Editorial layout", "Motion systems", "Token architecture", "Design engineering"],
+    id: "msen",
+    index: "02",
+    name: "MS-EN",
+    depth: "420M",
+    subtitle: "Language under pressure",
+    summary:
+      "A language learning system for vocabulary, reading, translation and writing correction. It reorganizes scattered learning work into one slower instrument.",
+    intent:
+      "Make language practice feel structured, traceable and less fragmented across memory, reading and writing.",
+    interface: "Nuxt 4, Vue 3, Pinia, Ant Design Vue",
+    system: "Spring Boot, Spring AI, DeepSeek, Redis, MySQL",
+    focus: "word memory, article reading, essay correction",
+    diagramNote: "document, sound and correction paths",
+    visual: "language",
   },
   {
-    title: "Backend systems",
-    size: "narrow",
-    items: ["Node.js and Bun", "Edge functions", "Postgres and SQLite", "Static generation"],
-  },
-  {
-    title: "Product thinking",
-    size: "wide",
-    items: ["Information architecture", "Narrative design", "Interaction polish", "Constraints as craft"],
+    id: "tucang",
+    index: "03",
+    name: "TuCang",
+    depth: "520M",
+    subtitle: "Images held in orbit",
+    summary:
+      "A visual archive space for image upload, search, AI generation and collection analysis. It gives image assets a place to be stored, found and studied.",
+    intent:
+      "Build an image system that moves from storage to retrieval to visual generation without losing order.",
+    interface: "Vue 3, Vite, Pinia, Ant Design Vue",
+    system: "Spring Boot, COS, Elasticsearch, RabbitMQ, WebSocket",
+    focus: "picture spaces, AI generation, search, analysis",
+    diagramNote: "archive grid with search trace",
+    visual: "archive",
   },
 ];
+
+const projectById: Record<ProjectId, ProjectStudy> = {
+  formcarv: projects[0] as ProjectStudy,
+  msen: projects[1] as ProjectStudy,
+  tucang: projects[2] as ProjectStudy,
+};
+
+const activeProject = computed<ProjectStudy>(() => projectById[props.projectId]);
 </script>
 
 <style lang="scss" scoped>
-.skills {
-  &__lede {
-    max-width: 42ch;
-    margin-bottom: clamp(3rem, 6vw, 5rem);
+.project-study {
+  position: relative;
+  width: min(84vw, 82rem);
+  min-height: min(68dvh, 42rem);
+  margin: 0 auto;
+  color: var(--abyss-fg);
+  isolation: isolate;
+
+  &__ghost-index {
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    z-index: -2;
+    font-family: $font-serif;
+    font-size: clamp(15rem, 29vw, 30rem);
+    font-weight: 300;
+    line-height: 0.75;
+    letter-spacing: -0.08em;
+    color: color-mix(in srgb, var(--abyss-fg) 3.8%, transparent);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
+  &__field-lines {
+    position: absolute;
+    inset: 5% 0 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: color-mix(in srgb, var(--line-current-mid) 28%, transparent);
+    stroke-width: 1;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.34;
+    pointer-events: none;
+  }
+
+  &__field-lines path:nth-child(1),
+  &__field-lines path:nth-child(2) {
+    stroke-dasharray: 4 18;
+  }
+
+  &__field-lines path:nth-child(3),
+  &__field-lines path:nth-child(4) {
+    opacity: 0.35;
+  }
+
+  &__article {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(18rem, 0.78fr);
+    gap: clamp(3rem, 6.4vw, 7rem);
+    align-items: center;
+    min-height: clamp(25rem, 58dvh, 36rem);
+  }
+
+  &__copy {
+    max-width: 43rem;
+  }
+
+  &__eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem 1.15rem;
+    margin: 0 0 clamp(1.2rem, 2.4vh, 1.8rem);
+    font-family: $font-mono;
+    font-size: clamp(0.56rem, 0.72vw, 0.68rem);
+    letter-spacing: 0.18em;
+    color: var(--abyss-fg-subtle);
+    text-transform: uppercase;
+  }
+
+  &__eyebrow span:first-child {
+    color: var(--accent-current);
+  }
+
+  &__name {
+    margin: 0;
+    font-family: $font-serif;
+    font-size: clamp(3.8rem, 7.8vw, 8.4rem);
+    font-weight: 300;
+    line-height: 0.84;
+    letter-spacing: -0.055em;
+    color: color-mix(in srgb, var(--abyss-fg) 94%, var(--accent-current) 6%);
+    text-wrap: balance;
+  }
+
+  &__subtitle {
+    max-width: 16ch;
+    margin: clamp(1rem, 2vh, 1.4rem) 0 0;
+    font-family: $font-serif;
+    font-size: clamp(1.35rem, 2.2vw, 2.6rem);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.12;
+    color: color-mix(in srgb, var(--accent-current) 54%, var(--abyss-fg) 46%);
+  }
+
+  &__summary {
+    max-width: 48ch;
+    margin: clamp(1.35rem, 2.6vh, 2rem) 0 0;
     font-family: $font-sans;
-    font-size: clamp(1rem, 1.4vw, 1.2rem);
-    line-height: 1.75;
+    font-size: clamp(0.9rem, 1vw, 1.05rem);
+    line-height: 1.72;
     color: var(--abyss-fg-muted);
     text-wrap: pretty;
   }
 
-  &__grid {
+  &__intent {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: clamp(1.5rem, 3vw, 3rem);
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    grid-template-columns: 5.6rem minmax(0, 1fr);
+    gap: clamp(1.25rem, 2.2vw, 2rem);
+    max-width: 42rem;
+    margin-top: clamp(1.5rem, 3vh, 2.35rem);
+    padding-top: clamp(1.15rem, 2.3vh, 1.7rem);
+    border-top: 1px solid color-mix(in srgb, var(--line-current-mid) 45%, transparent);
   }
 
-  &__group {
-    grid-column: span 5;
-    min-height: 16rem;
-    padding: 1.35rem 0 2rem;
-    border-top: 1px solid var(--line-current-mid);
-
-    &[data-size="wide"] {
-      grid-column: span 7;
-    }
-  }
-
-  &__group-index {
-    display: block;
-    margin-bottom: 2.5rem;
+  &__intent span {
     font-family: $font-mono;
-    font-size: 0.66rem;
-    letter-spacing: 0.16em;
+    font-size: clamp(0.54rem, 0.64vw, 0.62rem);
+    letter-spacing: 0.18em;
     color: var(--accent-current);
+    text-transform: uppercase;
   }
 
-  &__group-title {
-    max-width: 13ch;
-    font-family: $font-display;
-    font-size: clamp(2rem, 3vw, 3.3rem);
-    font-weight: 300;
-    line-height: 1;
-    letter-spacing: -0.025em;
-    color: var(--abyss-fg);
-    text-wrap: balance;
-  }
-
-  &__group-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    max-width: 38rem;
-    margin: 2rem 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  &__item {
-    font-family: $font-sans;
-    font-size: 0.82rem;
-    line-height: 1.6;
+  &__intent p {
+    margin: 0;
+    font-family: $font-serif;
+    font-size: clamp(1rem, 1.26vw, 1.25rem);
+    font-style: italic;
+    line-height: 1.55;
     color: var(--abyss-fg-muted);
   }
 
-  @media (max-width: 767px) {
-    &__grid {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
+  &__facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 2rem);
+    max-width: 48rem;
+    margin: clamp(1.5rem, 3vh, 2.3rem) 0 0;
+  }
 
-    &__group,
-    &__group[data-size="wide"] {
-      grid-column: 1;
+  &__facts div {
+    min-width: 0;
+    padding-top: 0.85rem;
+    border-top: 1px solid color-mix(in srgb, var(--line-current-mid) 34%, transparent);
+  }
+
+  &__facts dt {
+    margin: 0 0 0.62rem;
+    font-family: $font-mono;
+    font-size: clamp(0.52rem, 0.62vw, 0.6rem);
+    letter-spacing: 0.17em;
+    color: var(--abyss-fg-subtle);
+    text-transform: uppercase;
+  }
+
+  &__facts dd {
+    margin: 0;
+    font-family: $font-sans;
+    font-size: clamp(0.72rem, 0.82vw, 0.86rem);
+    line-height: 1.55;
+    color: var(--abyss-fg-muted);
+  }
+
+  &__visual {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    min-height: clamp(20rem, 50dvh, 34rem);
+  }
+
+  &__visual::before {
+    content: "";
+    position: absolute;
+    inset: 9% 11%;
+    border: 1px solid color-mix(in srgb, var(--line-current-mid) 18%, transparent);
+    border-radius: 50%;
+    transform: rotate(-8deg);
+  }
+
+  &__visual svg {
+    position: relative;
+    width: min(78%, 24rem);
+    max-height: 30rem;
+    overflow: visible;
+  }
+
+  &__diagram {
+    fill: none;
+    stroke: color-mix(in srgb, var(--abyss-fg) 66%, var(--accent-current) 34%);
+    stroke-width: 0.96;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  &__visual p {
+    margin: clamp(1rem, 2vh, 1.4rem) 0 0;
+    font-family: $font-mono;
+    font-size: clamp(0.54rem, 0.64vw, 0.62rem);
+    letter-spacing: 0.16em;
+    color: var(--abyss-fg-subtle);
+    text-transform: uppercase;
+  }
+
+  &__nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: clamp(0.2rem, 1vh, 0.9rem);
+    display: flex;
+    justify-content: center;
+    gap: clamp(1rem, 2.4vw, 2.6rem);
+  }
+
+  &__nav-item {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    gap: 0.75rem;
+    align-items: baseline;
+    padding: 0.45rem 0;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: var(--abyss-fg-subtle);
+    cursor: pointer;
+    font-family: $font-mono;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition:
+      color 760ms $ease-fluid,
+      border-color 760ms $ease-fluid,
+      opacity 760ms $ease-fluid,
+      transform 760ms $ease-fluid;
+  }
+
+  &__nav-item span {
+    font-size: clamp(0.52rem, 0.62vw, 0.6rem);
+  }
+
+  &__nav-item strong {
+    font-size: clamp(0.58rem, 0.72vw, 0.72rem);
+    font-weight: 400;
+  }
+
+  &__nav-item:hover,
+  &__nav-item:focus-visible,
+  &__nav-item.is-active {
+    color: var(--abyss-fg);
+    border-color: color-mix(in srgb, var(--accent-current) 48%, transparent);
+  }
+
+  &__nav-item.is-active {
+    transform: translateY(-0.12rem);
+  }
+
+  &__nav-item:focus-visible {
+    outline: 1px solid var(--accent-current);
+    outline-offset: 0.35rem;
+  }
+
+  @media (max-width: 980px) {
+    width: min(88vw, 48rem);
+
+    &__article {
+      grid-template-columns: 1fr;
+      gap: clamp(2rem, 4vh, 3rem);
       min-height: auto;
     }
+
+    &__visual {
+      min-height: 16rem;
+      opacity: 0.8;
+    }
+
+    &__visual svg {
+      width: min(66%, 20rem);
+    }
+
+    &__facts {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    &__nav {
+      position: relative;
+      bottom: auto;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 680px) {
+    width: min(86vw, 34rem);
+
+    &__ghost-index {
+      font-size: clamp(12rem, 55vw, 18rem);
+    }
+
+    &__name {
+      font-size: clamp(3.2rem, 16vw, 5rem);
+    }
+
+    &__intent {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    &__visual {
+      display: none;
+    }
+  }
+}
+
+.project-study-fade-enter-active,
+.project-study-fade-leave-active {
+  transition:
+    opacity 900ms $ease-fluid,
+    transform 960ms $ease-fluid,
+    filter 960ms $ease-fluid;
+}
+
+.project-study-fade-enter-from,
+.project-study-fade-leave-to {
+  opacity: 0;
+    filter: blur(2.6px);
+  transform: translate3d(0, 0.9rem, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-study-fade-enter-active,
+  .project-study-fade-leave-active,
+  .project-study * {
+    transition-duration: 1ms;
+    animation-duration: 1ms;
   }
 }
 </style>

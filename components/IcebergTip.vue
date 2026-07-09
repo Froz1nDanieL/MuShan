@@ -1,5 +1,11 @@
 <template>
-  <div class="iceberg-tip" :data-stage="stage" :style="icebergVars" aria-hidden="true">
+  <div
+    class="iceberg-tip"
+    :data-stage="stage"
+    :data-phase="phase"
+    :style="icebergVars"
+    aria-hidden="true"
+  >
     <svg
       class="iceberg-tip__visual"
       viewBox="0 0 1600 240"
@@ -79,46 +85,27 @@
 <script setup lang="ts">
 import type { CSSProperties } from "vue";
 import { computed } from "vue";
-import { useWindowSize } from "@vueuse/core";
-import { useReducedMotion } from "~/composables/useReducedMotion";
 import { useSceneStage } from "~/composables/useSceneStage";
-import { useScrollDepth } from "~/composables/useScrollDepth";
+
+const props = withDefaults(
+  defineProps<{
+    phase?: "surface" | "submerged";
+  }>(),
+  {
+    phase: "surface",
+  },
+);
 
 const { stage } = useSceneStage();
-const { scrollY } = useScrollDepth();
-const reducedMotion = useReducedMotion();
-const { height: viewportHeight } = useWindowSize({ initialHeight: 900 });
-
-function clamp01(value: number) {
-  return value < 0 ? 0 : value > 1 ? 1 : value;
-}
-
-function smoothstep(edge0: number, edge1: number, value: number) {
-  const progress = clamp01((value - edge0) / (edge1 - edge0 || 1));
-  return progress * progress * (3 - 2 * progress);
-}
-
-const localScrollProgress = computed(() => {
-  if (stage.value !== "descending") return 0;
-  return scrollY.value / Math.max(1, viewportHeight.value);
-});
-
-const descentProgress = computed(() => {
-  if (stage.value !== "descending") return 0;
-  if (reducedMotion.value) return 1;
-  return smoothstep(0.08, 1.08, localScrollProgress.value);
-});
 
 const icebergVars = computed<CSSProperties>(() => {
-  const progress = descentProgress.value;
-  const exitProgress =
-    stage.value === "descending"
-      ? smoothstep(1.2, 1.48, localScrollProgress.value)
-      : 0;
+  const isSubmerged = props.phase === "submerged";
 
   return {
-    "--iceberg-exit-opacity": (1 - exitProgress).toFixed(4),
-    "--iceberg-exit-y": `${(-46 * exitProgress - 10 * progress).toFixed(2)}px`,
+    "--iceberg-exit-opacity": isSubmerged ? "0.42" : "1",
+    "--iceberg-exit-y": isSubmerged ? "-10px" : "0px",
+    "--iceberg-blur": isSubmerged ? "5px" : "0px",
+    "--iceberg-scale": isSubmerged ? "1.012" : "1",
   } as CSSProperties;
 });
 </script>
@@ -150,18 +137,20 @@ const icebergVars = computed<CSSProperties>(() => {
 .iceberg-tip__visual {
   position: absolute;
   right: 0;
-  bottom: 34dvh;
+  bottom: 48.5dvh;
   left: 0;
   display: block;
   width: 100vw;
   height: clamp(9rem, 22dvh, 15rem);
   overflow: visible;
   opacity: var(--iceberg-exit-opacity);
-  transform: translate3d(0, var(--iceberg-exit-y), 0);
+  filter: blur(var(--iceberg-blur));
+  transform: translate3d(0, var(--iceberg-exit-y), 0) scale(var(--iceberg-scale));
   transition:
     opacity 1100ms $ease-fluid,
-    transform 1300ms $ease-fluid;
-  will-change: opacity, transform;
+    transform 1300ms $ease-fluid,
+    filter 1300ms $ease-fluid;
+  will-change: opacity, transform, filter;
 }
 
 .iceberg-tip__outline,
@@ -248,14 +237,14 @@ const icebergVars = computed<CSSProperties>(() => {
 
 @media (max-width: 1023px) {
   .iceberg-tip__visual {
-    bottom: 33dvh;
+    bottom: 48dvh;
     height: clamp(7.5rem, 18dvh, 11rem);
   }
 }
 
 @media (max-width: 767px) {
   .iceberg-tip__visual {
-    bottom: 32dvh;
+    bottom: 47.5dvh;
     height: clamp(6.4rem, 15dvh, 8.6rem);
   }
 
@@ -274,12 +263,11 @@ const icebergVars = computed<CSSProperties>(() => {
     animation: none;
     transition: none;
     stroke-dashoffset: 0;
-    transform: none;
     will-change: auto;
   }
 
   .iceberg-tip__visual {
-    opacity: 1;
+    opacity: var(--iceberg-exit-opacity);
   }
 }
 

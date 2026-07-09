@@ -6,15 +6,8 @@
     :data-depth="depth"
     :data-act="stage"
   >
-    <div class="depth-section__measure" aria-hidden="true" />
-
     <div class="depth-section__inner">
-      <header class="depth-section__head">
-        <div class="depth-section__meta">
-          <span>ACT {{ stage }}</span>
-          <span class="depth-section__divider" aria-hidden="true" />
-          <span>{{ depth }}</span>
-        </div>
+      <header v-if="showTitle" class="depth-section__head">
         <h2 class="depth-section__title">{{ title }}</h2>
       </header>
 
@@ -35,10 +28,12 @@ withDefaults(
     depth: string;
     title: string;
     stage: string;
+    showTitle?: boolean;
   }>(),
   {
     index: "",
     stage: "04",
+    showTitle: true,
   },
 );
 
@@ -49,25 +44,11 @@ const root = ref<HTMLElement | null>(null);
 .depth-section {
   position: relative;
   display: flex;
-  min-height: 112dvh;
+  min-height: 100dvh;
   align-items: center;
-  padding: 11rem clamp(1.25rem, 7vw, 7rem) 9rem;
+  padding: clamp(7rem, 12vh, 9rem) clamp(1.25rem, 7vw, 7rem)
+    clamp(5.5rem, 10vh, 7rem);
   color: var(--abyss-fg);
-
-  &__measure {
-    position: absolute;
-    top: 15vh;
-    bottom: 15vh;
-    left: clamp(1rem, 3.5vw, 3.5rem);
-    width: 1px;
-    background: linear-gradient(
-      180deg,
-      transparent,
-      var(--line-current-soft) 18%,
-      var(--line-current-soft) 82%,
-      transparent
-    );
-  }
 
   &__inner {
     width: min(100%, 90rem);
@@ -79,22 +60,6 @@ const root = ref<HTMLElement | null>(null);
     flex-direction: column;
     gap: 1.35rem;
     margin-bottom: clamp(3rem, 6vw, 5.5rem);
-  }
-
-  &__meta {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    font-family: $font-mono;
-    font-size: 0.66rem;
-    letter-spacing: 0.2em;
-    color: var(--abyss-fg-muted);
-  }
-
-  &__divider {
-    width: 2.5rem;
-    height: 1px;
-    background: var(--line-current-mid);
   }
 
   &__title {
@@ -115,11 +80,7 @@ const root = ref<HTMLElement | null>(null);
   @media (max-width: 767px) {
     min-height: 100dvh;
     align-items: flex-start;
-    padding: 8rem 1.25rem 6rem;
-
-    &__measure {
-      display: none;
-    }
+    padding: 7rem 1.25rem 5.5rem;
 
     &__title {
       font-size: clamp(3.5rem, 18vw, 5.5rem);

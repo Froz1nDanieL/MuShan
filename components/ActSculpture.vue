@@ -1,18 +1,5 @@
 <template>
   <section class="act-sculpture" aria-labelledby="face-title">
-    <div class="act-sculpture__frame" aria-hidden="true">
-      <span class="act-sculpture__corner act-sculpture__corner--tl" />
-      <span class="act-sculpture__corner act-sculpture__corner--tr" />
-      <span class="act-sculpture__corner act-sculpture__corner--bl" />
-      <span class="act-sculpture__corner act-sculpture__corner--br" />
-    </div>
-
-    <header class="act-sculpture__meta">
-      <span>ACT 01</span>
-      <span class="act-sculpture__meta-rule" aria-hidden="true" />
-      <span>THE FACE</span>
-    </header>
-
     <h1
       id="face-title"
       class="act-sculpture__identity"
@@ -22,21 +9,13 @@
         class="act-sculpture__name-rail act-sculpture__name-rail--left"
         aria-hidden="true"
       >
-        <span>D</span>
-        <span>A</span>
-        <span>N</span>
-        <span>I</span>
-        <span>E</span>
-        <span>L</span>
+        Daniel
       </span>
       <span
         class="act-sculpture__name-rail act-sculpture__name-rail--right"
         aria-hidden="true"
       >
-        <span>C</span>
-        <span>H</span>
-        <span>A</span>
-        <span>N</span>
+        Chan
       </span>
     </h1>
 
@@ -79,65 +58,6 @@ function reveal() {
   color: var(--abyss-fg, #18252c);
   pointer-events: none;
 
-  &__frame {
-    position: absolute;
-    inset: clamp(1rem, 3.4vw, 3.25rem);
-    pointer-events: none;
-  }
-
-  &__corner {
-    position: absolute;
-    width: 1.35rem;
-    height: 1.35rem;
-    border-color: var(--line-current-mid);
-    border-style: solid;
-    border-width: 0;
-
-    &--tl {
-      top: 0;
-      left: 0;
-      border-top-width: 1px;
-      border-left-width: 1px;
-    }
-
-    &--tr {
-      top: 0;
-      right: 0;
-      border-top-width: 1px;
-      border-right-width: 1px;
-    }
-
-    &--bl {
-      bottom: 0;
-      left: 0;
-      border-bottom-width: 1px;
-      border-left-width: 1px;
-    }
-
-    &--br {
-      right: 0;
-      bottom: 0;
-      border-right-width: 1px;
-      border-bottom-width: 1px;
-    }
-  }
-
-  &__meta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.8rem;
-    font-family: $font-mono;
-    font-size: 0.66rem;
-    letter-spacing: 0.2em;
-    color: var(--abyss-fg-muted);
-  }
-
-  &__meta-rule {
-    width: 2.5rem;
-    height: 1px;
-    background: var(--line-current-mid);
-  }
-
   &__identity {
     position: absolute;
     inset: 0;
@@ -149,21 +69,26 @@ function reveal() {
   &__name-rail {
     position: absolute;
     top: 50%;
-    display: flex;
-    justify-content: space-between;
-    width: clamp(19rem, 27vw, 38rem);
+    display: block;
+    width: clamp(14rem, 22vw, 29rem);
     font-family:
-      "Bodoni 72",
-      "Bodoni MT",
-      "Cormorant Garamond",
-      "Noto Serif SC",
-      "Songti SC",
-      serif;
-    font-size: clamp(3.55rem, 6.9vw, 8.15rem);
-    font-weight: 500;
-    line-height: 0.82;
-    letter-spacing: 0;
-    color: color-mix(in srgb, var(--abyss-fg) 94%, var(--color-cold-stone) 6%);
+      "Monsieur La Doulaise",
+      "Bickham Script Pro 3",
+      "Bickham Script Pro",
+      "Snell Roundhand",
+      "Edwardian Script ITC",
+      "Palace Script MT",
+      "Pinyon Script",
+      "Great Vibes",
+      "Allura",
+      "Zapfino",
+      "Brush Script MT",
+      cursive;
+    font-size: clamp(4.75rem, 8.7vw, 10.6rem);
+    font-weight: 400;
+    line-height: 0.64;
+    letter-spacing: -0.025em;
+    color: color-mix(in srgb, var(--abyss-fg) 82%, var(--color-cold-stone) 18%);
     white-space: nowrap;
     text-rendering: geometricPrecision;
     font-kerning: normal;
@@ -171,28 +96,30 @@ function reveal() {
     font-feature-settings:
       "kern" 1,
       "liga" 1,
-      "calt" 0;
+      "dlig" 1,
+      "salt" 1,
+      "calt" 1,
+      "swsh" 1;
     -webkit-font-smoothing: antialiased;
     opacity: 0;
+    font-synthesis: none;
+    -webkit-text-stroke: 0.006em rgba(2, 4, 10, 0.08);
     text-shadow:
-      0 0.014em 0 rgba(255, 255, 255, 0.38),
-      0 -0.01em 0 rgba(2, 4, 10, 0.1);
+      0 0.012em 0 rgba(255, 255, 255, 0.42),
+      0 -0.008em 0 rgba(2, 4, 10, 0.12),
+      0 0.2em 1.3em rgba(184, 193, 198, 0.13);
     animation: name-reveal 1.15s $ease-abyss 180ms forwards;
 
     &--left {
-      right: calc(50% + clamp(12.65rem, 18vw, 20.5rem));
+      right: calc(50% + clamp(12.4rem, 17.4vw, 19.6rem));
       transform: translateY(-50%);
+      text-align: right;
     }
 
     &--right {
-      left: calc(50% + clamp(12.65rem, 18vw, 20.5rem));
+      left: calc(50% + clamp(12.4rem, 17.4vw, 19.6rem));
       transform: translateY(-50%);
-    }
-
-    span {
-      display: block;
-      transform: scaleX(1.08);
-      transform-origin: center;
+      text-align: left;
     }
   }
 
@@ -280,8 +207,9 @@ function reveal() {
 
     &__name-rail {
       top: 47%;
-      width: min(35vw, 7.5rem);
-      font-size: clamp(1.16rem, 6.2vw, 1.92rem);
+      width: min(38vw, 9rem);
+      font-size: clamp(2.45rem, 12vw, 4rem);
+      letter-spacing: -0.03em;
       text-shadow:
         0 0.014em 0 rgba(255, 255, 255, 0.36),
         0 -0.01em 0 rgba(2, 4, 10, 0.06);
@@ -313,13 +241,13 @@ function reveal() {
     opacity: 0;
   }
   to {
-    opacity: 1;
+    opacity: 0.86;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .act-sculpture__name-rail {
-    opacity: 1;
+    opacity: 0.86;
     animation: none;
   }
 }

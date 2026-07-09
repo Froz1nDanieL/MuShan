@@ -4,15 +4,15 @@
       <div class="act-descent__meta">
         <span>ACT 03</span>
         <span class="act-descent__meta-rule" aria-hidden="true" />
-        <span>THE DESCENT</span>
+        <span>INNER DYNAMICS</span>
       </div>
 
       <div class="act-descent__content">
         <h2 id="descent-title" class="act-descent__title">
-          Below is where the shape begins.
+          Sound, shape, and motion briefly surface.
         </h2>
         <p class="act-descent__lede">
-          The surface recedes. Structure comes into view.
+          Three quiet forces appear before the project mass.
         </p>
       </div>
     </div>

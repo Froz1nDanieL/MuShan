@@ -38,11 +38,11 @@ const actLabel = computed(() => {
     case "tip":
       return "ACT 02 / THE TIP";
     case "descending":
-      return "ACT 03 / THE DESCENT";
+      return "ACT 03 / INNER DYNAMICS";
     case "underwater":
       return "ACT 04 / THE MASS";
     case "signal":
-      return "ACT 05 / THE SIGNAL";
+      return "ACT 05 / THE CONTACT";
     default:
       return "";
   }

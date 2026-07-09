@@ -16,7 +16,7 @@ export const ABYSS_STOPS = [
   {
     at: 0.4,
     hex: "#CFE3EA",
-    act: "ACT 03 / THE DESCENT",
+    act: "ACT 03 / INNER DYNAMICS",
     label: "Light Cold Blue",
   },
   {
@@ -28,13 +28,13 @@ export const ABYSS_STOPS = [
   {
     at: 0.8,
     hex: "#071A26",
-    act: "ACT 05 / THE SIGNAL",
+    act: "ACT 05 / THE CONTACT",
     label: "Deep Sea Black-Blue",
   },
   {
     at: 1,
     hex: "#02040A",
-    act: "ACT 05 / ABYSS",
+    act: "ACT 05 / CONTACT TERMINAL",
     label: "Abyss Black",
   },
 ] as const;

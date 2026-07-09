@@ -1,9 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { fileURLToPath } from "node:url";
 import { platform } from "node:os";
+import { fileURLToPath } from "node:url";
 
-// Windows 上 .output/public 常被杀软/索引器锁住导致 EBUSY，
-// 自动改用 .output_build 绕开；其他平台保持默认 .output。
+// On Windows, .output/public can be locked by antivirus or indexing services.
+// Use .output_build there while keeping Nuxt's default output elsewhere.
 const isWindows = platform() === "win32";
 const outputDir =
   process.env.NITRO_OUTPUT_DIR || (isWindows ? ".output_build" : ".output");
@@ -12,12 +12,6 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
 
-  // 静态站点生成 - 支持 Vercel / Cloudflare Pages / Netlify / GitHub Pages
-  // 通过 NITRO_PRESET 环境变量切换目标
-  //   NITRO_PRESET=vercel_static        → Vercel
-  //   NITRO_PRESET=cloudflare_pages     → Cloudflare Pages
-  //   NITRO_PRESET=netlify              → Netlify
-  //   NITRO_PRESET=github_pages         → GitHub Pages
   ssr: true,
   nitro: {
     prerender: {
@@ -26,8 +20,6 @@ export default defineNuxtConfig({
       failOnError: false,
     },
     preset: process.env.NITRO_PRESET || "static",
-    // 允许通过 NITRO_OUTPUT_DIR 覆盖 .output 目录，便于在
-    // Windows 杀软/索引器锁定 .output/public 时绕开 EBUSY。
     output: {
       dir: outputDir,
     },
@@ -36,7 +28,7 @@ export default defineNuxtConfig({
   modules: ["@unocss/nuxt", "@tresjs/nuxt", "@vueuse/nuxt"],
 
   components: [
-    // 自动扫描，但保留目录前缀 (Sections*) / (Three*)
+    // Keep directory prefixes for auto-imported section and Three components.
     { path: "~/components", pathPrefix: true },
   ],
 
@@ -58,7 +50,15 @@ export default defineNuxtConfig({
         },
         { name: "color-scheme", content: "light dark" },
       ],
-      link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
+      link: [
+        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&display=swap",
+        },
+      ],
     },
   },
 
