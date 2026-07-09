@@ -54,49 +54,7 @@
         </div>
 
         <div class="project-study__visual" aria-hidden="true">
-          <svg viewBox="0 0 520 520" preserveAspectRatio="xMidYMid meet">
-            <g v-if="activeProject.visual === 'form'" class="project-study__diagram">
-                <path d="M256 72 C 304 92, 331 145, 322 202 C 313 258, 278 312, 256 378" />
-                <path d="M256 72 C 207 92, 181 145, 190 202 C 199 258, 234 312, 256 378" />
-                <path d="M210 128 C 232 114, 280 114, 302 128" />
-                <path d="M194 186 C 232 166, 282 166, 320 186" />
-                <path d="M196 248 C 232 270, 282 270, 318 248" />
-                <path d="M214 324 C 238 338, 274 338, 298 324" />
-                <path d="M168 392 C 208 366, 304 366, 344 392" />
-                <path d="M126 420 C 180 388, 332 388, 394 420" />
-                <circle cx="256" cy="228" r="10" />
-                <path d="M256 228 V384" />
-            </g>
-
-            <g v-else-if="activeProject.visual === 'language'" class="project-study__diagram">
-                <path d="M154 92 H318 L370 144 V418 H154 Z" />
-                <path d="M318 92 V146 H370" />
-                <path d="M190 174 H320" />
-                <path d="M190 206 H300" />
-                <path d="M190 238 H334" />
-                <path d="M190 270 H286" />
-                <path d="M190 332 C 230 304, 272 362, 310 330 S 372 300, 398 340" />
-                <path d="M114 178 C 84 206, 84 278, 114 306" />
-                <path d="M406 178 C 438 208, 438 278, 406 306" />
-                <circle cx="232" cy="130" r="8" />
-                <circle cx="264" cy="130" r="8" />
-            </g>
-
-            <g v-else class="project-study__diagram">
-                <rect x="118" y="118" width="284" height="232" rx="6" />
-                <path d="M150 154 H236" />
-                <path d="M280 154 H368" />
-                <rect x="150" y="190" width="74" height="60" rx="4" />
-                <rect x="246" y="190" width="74" height="60" rx="4" />
-                <rect x="150" y="272" width="74" height="44" rx="4" />
-                <rect x="246" y="272" width="122" height="44" rx="4" />
-                <path d="M120 384 C 176 346, 246 422, 306 372 S 386 346, 432 394" />
-                <circle cx="382" cy="106" r="24" />
-                <path d="M400 124 L438 162" />
-            </g>
-          </svg>
-
-          <p>{{ activeProject.diagramNote }}</p>
+          <div class="project-study__media-slot"></div>
         </div>
       </article>
     </Transition>
@@ -135,8 +93,6 @@ type ProjectStudy = {
   interface: string;
   system: string;
   focus: string;
-  diagramNote: string;
-  visual: "form" | "language" | "archive";
 };
 
 const props = withDefaults(
@@ -166,8 +122,6 @@ const projects: ProjectStudy[] = [
     interface: "Flutter mobile app",
     system: "Spring Boot, PostgreSQL, MyBatis-Plus, Sa-Token",
     focus: "exercise library, workout history, body metrics",
-    diagramNote: "body ledger, reduced to line and measure",
-    visual: "form",
   },
   {
     id: "msen",
@@ -182,8 +136,6 @@ const projects: ProjectStudy[] = [
     interface: "Nuxt 4, Vue 3, Pinia, Ant Design Vue",
     system: "Spring Boot, Spring AI, DeepSeek, Redis, MySQL",
     focus: "word memory, article reading, essay correction",
-    diagramNote: "document, sound and correction paths",
-    visual: "language",
   },
   {
     id: "tucang",
@@ -198,8 +150,6 @@ const projects: ProjectStudy[] = [
     interface: "Vue 3, Vite, Pinia, Ant Design Vue",
     system: "Spring Boot, COS, Elasticsearch, RabbitMQ, WebSocket",
     focus: "picture spaces, AI generation, search, analysis",
-    diagramNote: "archive grid with search trace",
-    visual: "archive",
   },
 ];
 
@@ -387,38 +337,37 @@ const activeProject = computed<ProjectStudy>(() => projectById[props.projectId])
     min-height: clamp(20rem, 50dvh, 34rem);
   }
 
-  &__visual::before {
+  &__media-slot {
+    position: relative;
+    width: min(100%, 28rem);
+    aspect-ratio: 4 / 3;
+    opacity: 0.52;
+  }
+
+  &__media-slot::before,
+  &__media-slot::after {
     content: "";
     position: absolute;
-    inset: 9% 11%;
-    border: 1px solid color-mix(in srgb, var(--line-current-mid) 18%, transparent);
-    border-radius: 50%;
-    transform: rotate(-8deg);
+    inset: 0;
+    pointer-events: none;
   }
 
-  &__visual svg {
-    position: relative;
-    width: min(78%, 24rem);
-    max-height: 30rem;
-    overflow: visible;
+  &__media-slot::before {
+    border-top: 1px solid color-mix(in srgb, var(--line-current-mid) 20%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--line-current-mid) 12%, transparent);
+    transform: skewY(-3deg);
   }
 
-  &__diagram {
-    fill: none;
-    stroke: color-mix(in srgb, var(--abyss-fg) 66%, var(--accent-current) 34%);
-    stroke-width: 0.96;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    vector-effect: non-scaling-stroke;
-  }
-
-  &__visual p {
-    margin: clamp(1rem, 2vh, 1.4rem) 0 0;
-    font-family: $font-mono;
-    font-size: clamp(0.54rem, 0.64vw, 0.62rem);
-    letter-spacing: 0.16em;
-    color: var(--abyss-fg-subtle);
-    text-transform: uppercase;
+  &__media-slot::after {
+    inset: 16% 10%;
+    background:
+      linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--line-current-mid) 12%, transparent),
+        transparent
+      );
+    opacity: 0.4;
   }
 
   &__nav {
@@ -491,8 +440,8 @@ const activeProject = computed<ProjectStudy>(() => projectById[props.projectId])
       opacity: 0.8;
     }
 
-    &__visual svg {
-      width: min(66%, 20rem);
+    &__media-slot {
+      width: min(72%, 22rem);
     }
 
     &__facts {
