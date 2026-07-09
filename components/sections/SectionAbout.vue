@@ -640,8 +640,8 @@ function nodeStyle(interest: Interest): CSSProperties {
     font-weight: 300;
     font-style: italic;
     line-height: 1;
-    color: color-mix(in srgb, var(--abyss-fg) 46%, transparent);
-    opacity: 0.56;
+    color: color-mix(in srgb, var(--abyss-fg) 72%, var(--accent-current) 28%);
+    opacity: 0.72;
     text-decoration: none;
     white-space: nowrap;
     pointer-events: auto;
@@ -652,8 +652,8 @@ function nodeStyle(interest: Interest): CSSProperties {
   }
 
   &__float:hover {
-    color: color-mix(in srgb, var(--abyss-fg) 82%, var(--accent-current) 18%);
-    opacity: 0.9;
+    color: color-mix(in srgb, var(--abyss-fg) 92%, var(--accent-current) 8%);
+    opacity: 0.96;
   }
 
   &__float--artist {
@@ -669,7 +669,7 @@ function nodeStyle(interest: Interest): CSSProperties {
     font-weight: 400;
     line-height: 0.82;
     letter-spacing: -0.045em;
-    text-shadow: 0 0 26px color-mix(in srgb, currentColor 12%, transparent);
+    text-shadow: 0 0 22px color-mix(in srgb, var(--color-museum-white) 20%, transparent);
   }
 
   &__float--principle {
@@ -683,42 +683,42 @@ function nodeStyle(interest: Interest): CSSProperties {
   &__float--wonder {
     top: 18%;
     right: 11%;
-    color: color-mix(in srgb, var(--color-signal) 58%, var(--abyss-fg) 42%);
+    color: color-mix(in srgb, var(--abyss-fg) 78%, var(--color-signal) 22%);
     transform: rotate(7deg);
   }
 
   &__float--bowie {
     top: 32%;
     left: 9%;
-    color: color-mix(in srgb, var(--color-ice) 62%, var(--abyss-fg) 38%);
+    color: color-mix(in srgb, var(--abyss-fg) 82%, var(--color-ice) 18%);
     transform: rotate(-9deg);
   }
 
   &__float--caesar {
     right: 18%;
     bottom: 15%;
-    color: color-mix(in srgb, var(--color-cold-blue) 64%, var(--abyss-fg) 36%);
+    color: color-mix(in srgb, var(--abyss-fg) 80%, var(--color-cold-blue) 20%);
     transform: rotate(-5deg);
   }
 
   &__float--travis {
     left: 15%;
     bottom: 18%;
-    color: color-mix(in srgb, var(--color-cyan-dim) 58%, var(--abyss-fg) 42%);
+    color: color-mix(in srgb, var(--abyss-fg) 78%, var(--color-cyan-dim) 22%);
     transform: rotate(8deg);
   }
 
   &__float--kanye {
     top: 52%;
     right: 7%;
-    color: color-mix(in srgb, var(--color-glacier) 62%, var(--abyss-fg) 38%);
+    color: color-mix(in srgb, var(--abyss-fg) 82%, var(--color-glacier) 18%);
     transform: rotate(-11deg);
   }
 
   &__float--boniver {
     top: 14%;
     left: 31%;
-    color: color-mix(in srgb, var(--color-frost-white) 64%, var(--abyss-fg) 36%);
+    color: color-mix(in srgb, var(--abyss-fg) 84%, var(--color-frost-white) 16%);
     transform: rotate(-4deg);
   }
 

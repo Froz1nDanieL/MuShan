@@ -19,16 +19,14 @@
     />
 
     <Transition name="act-one-fade">
-      <XRayImageSection
+      <section
         v-if="stage === 'sculpture'"
         key="act-01"
-        class="home-xray abyss-stage__slide"
-        image-src="/images/xray-img1.JPG"
-        :radius="190"
-        :glow="true"
+        class="act-one-scene abyss-stage__slide"
+        aria-labelledby="act-01-title"
       >
         <ActSculpture />
-      </XRayImageSection>
+      </section>
     </Transition>
 
     <Transition name="slide-fade" mode="out-in">
@@ -744,15 +742,8 @@ useHead({
   color: var(--abyss-fg-muted);
 }
 
-.home-xray {
+.act-one-scene {
   min-height: 100dvh;
-
-  :deep(.xray-image-section__image) {
-    object-position: center 42%;
-    filter: grayscale(1) contrast(1.55) brightness(1.1);
-    mix-blend-mode: multiply;
-    opacity: 0.82;
-  }
 }
 
 .abyss-stage__nav {
